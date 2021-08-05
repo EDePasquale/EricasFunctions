@@ -1,4 +1,4 @@
-Package: Ericas_Functions
+Package: EricasFunctions
 Title: A Package of Erica's Most Used Functions for Processing Data Plus Random Utilities
 Version: 1.0.0
 Authors@R: person("Erica", "DePasquale", email = "eakdepasquale@gmail.com", role = c("aut", "cre"))

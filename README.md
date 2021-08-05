@@ -10,7 +10,7 @@ Run the following code to install the package using devtools:
 if(!require(devtools)){
   install.packages("devtools") # If not already installed
 }
-devtools::install_github('EDePasquale/Ericas_Functions')
+devtools::install_github('EDePasquale/EricasFunctions')
 ```
 
 # Dependencies #
