@@ -21,17 +21,6 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
   options(stringsAsFactors = FALSE)
   options(scipen = 999)
   
-  # Source files 
-  #TODO: fix this so it's not hardcoded!
-  popcol.df <- read.xls("/Volumes/broad_vangalenlab/depasquale/AuxiliaryFiles/PopCol.xlsx") 
-  if (sig == T) {signatures <- read.xls("/Volumes/broad_vangalenlab/depasquale/AuxiliaryFiles/200727_signatures.xlsx", header = T, sheet = 1)}
-  source("/Volumes/broad_vangalenlab/depasquale/AuxiliaryFiles/200116_FunctionsGeneral.R")
-  if (genome == "GRCh38") {
-    geneInfo.dt <- fread("/Volumes/broad_vangalenlab/depasquale/AuxiliaryFiles/gene_info_GRCh38_PvG200204.txt")
-  } else if (genome == "GRCm38") {
-    geneInfo.dt <- fread("/Volumes/broad_vangalenlab/depasquale/AuxiliaryFiles/gene_info_GRCm38_PvG201122.txt")
-  }
-  
   # Load libraries
   library("Matrix")
   library("Matrix.utils")
@@ -41,6 +30,17 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
   library(umap)
   library(dplyr)
   library(DropletUtils)
+  
+  # Source files 
+  data(popcol)
+  if (sig == T) {data(signatures)}
+  if (genome == "GRCh38") {
+    data(geneInfoH)
+    geneInfo.dt = geneInfoH
+  } else {
+    data(geneInfoM)
+    geneInfo.dt = geneInfoM
+  }
   
   for(i in 1:length(directories)){
     
@@ -412,54 +412,17 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       plot(x = rep(1, nrow(sampleSheet)), y = nrow(sampleSheet):1, pch = 21, bg = sampleSheet$WellCol, cex = 3, xlim = c(0,15), axes = F, ylab = "", xlab = "")
       text(x = rep(1.5, nrow(sampleSheet)), y = nrow(sampleSheet):1, labels = sampleSheet$library_id, pos = 4)
       
+      dev.off()
+      
       # Color by signature score
       if (sig == T) {
-        message("\nCalculating signature scores")
-        signatures <- lapply(as.list(signatures), function(y) y[!is.na(y)])
-        signatures <- lapply(signatures, intersect, rownames(CM.norm.log))
-        CM.mean <- rowMeans(CM.norm.log)
-        signScore <- lapply(names(signatures), function(g) {
-          message(g)
-          scoreSignature(CM = as.matrix(CM.norm.log), signatures = signatures[[g]], CM.mean = CM.mean, verbose = T)
-        })
-        names(signScore) <- names(signatures)
-        
-        # Plot
-        for (n in names(signScore)) {
-          mycol <- colItay(signScore[[n]])
-          db=cbind(stats.dt$tSNEx, stats.dt$tSNEy)
-          plotTSNE(db, pch = 16, cex = cexsize, col = mycol, main = n)
-        }
-      }
-      dev.off()
-    
-      if(sig == T){
-        
-        # Bonus Plot for PPT
-        message(paste("\nGenerating", paste0(out.dir, "/", samples[x], "_tSNE_PPT.pdf")))
-        pdf(file = paste0(out.dir, "/", samples[x], "_tSNE_PPT.pdf"), width = 11, height = 8.5)
-        par(mar=c(2, 2, 2, 2))
-        
-        layout(matrix(1:16, ncol=4, nrow=4, byrow=TRUE))
-        
-        for(s in 30:45){
-          mycol <- colItay(signScore[[s]])
-          plot(cbind(stats.dt$tSNEx, stats.dt$tSNEy), xlab = NA, ylab = NA, tck = F, yaxt = "n", xaxt = "n", pch = 16, cex = cexsize, col = mycol, main = names(signatures)[s])
-        }
-        dev.off()
+        cell_signatures(cbind(stats.dt$tSNEx, stats.dt$tSNEy), CM.norm.log, signatures = signatures, file.path.prefix = paste0(out.dir, "/", samples[x]),  cexsize, type = "tSNE", subset = 30:45)
       }
       
       
       ########
       # UMAP #
       ########
-      
-      print(paste0("...UMAP ", x, "/", nrow(sampleSheet), " ", name))
-
-      plotUMAP <- function(x, pch = 16, ...) {
-        par(mfrow=c(1,1),mar=c(4,4,4,4))
-        plot(x, xlab = NA, ylab = NA, tck = F, yaxt = "n", xaxt = "n", pch = pch, ...)
-      }
       
       message("\nCalculating UMAP coordinates")
       
@@ -504,40 +467,11 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       plot(x = rep(1, nrow(sampleSheet)), y = nrow(sampleSheet):1, pch = 21, bg = sampleSheet$WellCol, cex = 3, xlim = c(0,15), axes = F, ylab = "", xlab = "")
       text(x = rep(1.5, nrow(sampleSheet)), y = nrow(sampleSheet):1, labels = sampleSheet$library_id, pos = 4)
       
-      # Color by signature score
-      if (sig == T) {
-        message("\nCalculating signature scores")
-        signatures <- lapply(as.list(signatures), function(y) y[!is.na(y)])
-        signatures <- lapply(signatures, intersect, rownames(CM.norm.log))
-        CM.mean <- rowMeans(CM.norm.log)
-        signScore <- lapply(names(signatures), function(g) {
-          message(g)
-          scoreSignature(CM = as.matrix(CM.norm.log), signatures = signatures[[g]], CM.mean = CM.mean, verbose = T)
-        })
-        names(signScore) <- names(signatures)
-        
-        # Plot
-        for (n in names(signScore)) {
-          mycol <- colItay(signScore[[n]])
-          plotUMAP(cbind(stats.dt$umapx, stats.dt$umapy), pch = 16, cex = cexsize, col = mycol, main = n)
-        }
-      }
       dev.off()
       
-      if(sig == T){
-        
-        # Bonus Plot for PPT
-        message(paste("\nGenerating", paste0(out.dir, "/", samples[x], "_UMAP_PPT.pdf")))
-        pdf(file = paste0(out.dir, "/", samples[x], "_UMAP_PPT.pdf"), width = 11, height = 8.5)
-        par(mar=c(2, 2, 2, 2))
-        
-        layout(matrix(1:16, ncol=4, nrow=4, byrow=TRUE))
-        
-        for(s in 30:45){
-          mycol <- colItay(signScore[[s]])
-          plot(cbind(stats.dt$umapx, stats.dt$umapy), xlab = NA, ylab = NA, tck = F, yaxt = "n", xaxt = "n", pch = 16, cex = cexsize, col = mycol, main = names(signatures)[s])
-        }
-        dev.off()
+      # Color by signature score
+      if (sig == T) {
+        cell_signatures(cbind(stats.dt$umapx, stats.dt$umapy), CM.norm.log, signatures = signatures, file.path.prefix = paste0(out.dir, "/", samples[x]), cexsize, type = "UMAP", subset = 30:45)
       }
      
   } # plotting close
