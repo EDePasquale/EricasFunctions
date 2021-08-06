@@ -62,8 +62,8 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
     
     # Set up
     sampleSheet <- read.csv(file = paste0(out.dir, "/", list.files(path = out.dir)[grepl(".csv$", list.files(path = out.dir))]))
-    sampleSheet$WellCol <- popcol.df$mycol[1:nrow(sampleSheet)]
-    sampleSheet$DonorCol <- popcol.df$mycol[as.numeric(as.factor(sampleSheet$Donor))+6]
+    sampleSheet$WellCol <- popcol$mycol[1:nrow(sampleSheet)]
+    sampleSheet$DonorCol <- popcol$mycol[as.numeric(as.factor(sampleSheet$Donor))+6]
    
     #=================================================
     # Load count matrix from CellRanger
