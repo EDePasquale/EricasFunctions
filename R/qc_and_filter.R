@@ -118,20 +118,6 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
     # Make file for plotting
     stats.dt=list(rep(NA, nrow(sampleSheet)))
     for(x in 1:length(sample_matrices)){
-      print(dim(sample_matrices[[x]]))
-      print(class(sample_matrices[[x]]))
-      test<<-sample_matrices[[x]]
-      print("umis")
-      a<<-Matrix::colSums(sample_matrices[[x]])
-      print("genes")
-      b<<-Matrix::colSums(sample_matrices[[x]] != 0)
-      print("chrYfraction")
-      c<<-Matrix::colSums(sample_matrices[[x]][Ychr.ch,]) / Matrix::colSums(sample_matrices[[x]])
-      print("chrMfraction")
-      d<<-Matrix::colSums(sample_matrices[[x]][chrMgenes.ch,]) / Matrix::colSums(sample_matrices[[x]])
-      print("chrMcount")
-      e<<-Matrix::colSums(sample_matrices[[x]][chrMgenes.ch,])
-      
       stats1.dt <- data.table(cell = colnames(sample_matrices[[x]]),
                               umis = Matrix::colSums(sample_matrices[[x]]),
                               genes = Matrix::colSums(sample_matrices[[x]] != 0),
