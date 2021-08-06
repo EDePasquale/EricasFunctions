@@ -22,8 +22,8 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
   options(scipen = 999)
   
   # Load libraries
-  library("Matrix")
-  library("Matrix.utils")
+  library(Matrix)
+  library(Matrix.utils)
   library(data.table)
   library(gdata)
   library(Rtsne)
@@ -122,7 +122,7 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       print(class(sample_matrices[[x]]))
       test<<-sample_matrices[[x]]
       print("umis")
-      a<<-colSums(sample_matrices[[x]])
+      a<<-Matrix::colSums(sample_matrices[[x]])
       print("genes")
       b<<-colSums(sample_matrices[[x]] != 0)
       print("chrYfraction")
