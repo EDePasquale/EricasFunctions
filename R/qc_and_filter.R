@@ -22,14 +22,14 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
   options(scipen = 999)
   
   # Load libraries
-  library(Matrix)
-  library(Matrix.utils)
-  library(data.table)
-  library(gdata)
-  library(Rtsne)
-  library(umap)
-  library(dplyr)
-  library(DropletUtils)
+  # library(Matrix)
+  # library(Matrix.utils)
+  # library(data.table)
+  # library(gdata)
+  # library(Rtsne)
+  # library(umap)
+  # library(dplyr)
+  # library(DropletUtils)
   
   # Source files 
   data(popcol)
@@ -124,20 +124,20 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       print("umis")
       a<<-Matrix::colSums(sample_matrices[[x]])
       print("genes")
-      b<<-colSums(sample_matrices[[x]] != 0)
+      b<<-Matrix::colSums(sample_matrices[[x]] != 0)
       print("chrYfraction")
-      c<<-colSums(sample_matrices[[x]][Ychr.ch,]) / colSums(sample_matrices[[x]])
+      c<<-Matrix::colSums(sample_matrices[[x]][Ychr.ch,]) / Matrix::colSums(sample_matrices[[x]])
       print("chrMfraction")
-      d<<-colSums(sample_matrices[[x]][chrMgenes.ch,]) / colSums(sample_matrices[[x]])
+      d<<-Matrix::colSums(sample_matrices[[x]][chrMgenes.ch,]) / Matrix::colSums(sample_matrices[[x]])
       print("chrMcount")
-      e<<-colSums(sample_matrices[[x]][chrMgenes.ch,])
+      e<<-Matrix::colSums(sample_matrices[[x]][chrMgenes.ch,])
       
       stats1.dt <- data.table(cell = colnames(sample_matrices[[x]]),
-                              umis = colSums(sample_matrices[[x]]),
-                              genes = colSums(sample_matrices[[x]] != 0),
-                              chrYfraction = colSums(sample_matrices[[x]][Ychr.ch,]) / colSums(sample_matrices[[x]]),
-                              chrMfraction = colSums(sample_matrices[[x]][chrMgenes.ch,]) / colSums(sample_matrices[[x]]),
-                              chrMcount = colSums(sample_matrices[[x]][chrMgenes.ch,]),
+                              umis = Matrix::colSums(sample_matrices[[x]]),
+                              genes = Matrix::colSums(sample_matrices[[x]] != 0),
+                              chrYfraction = Matrix::colSums(sample_matrices[[x]][Ychr.ch,]) / Matrix::colSums(sample_matrices[[x]]),
+                              chrMfraction = Matrix::colSums(sample_matrices[[x]][chrMgenes.ch,]) / Matrix::colSums(sample_matrices[[x]]),
+                              chrMcount = Matrix::colSums(sample_matrices[[x]][chrMgenes.ch,]),
                               wellcol = sampleSheet$WellCol[[x]],
                               donorcol = sampleSheet$DonorCol[[x]])
       setorder(stats1.dt, -umis)
