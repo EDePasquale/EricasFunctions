@@ -95,25 +95,14 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
     print(paste0("...QC plots ", name))
     
     # Make vectors with genes of interest
-    if (genome == "GRCh38") {
-      Ychr.ch <- geneInfoH$gene_name[geneInfoH$chr == "Y"]
-      for(x in 2:length(sample_matrices)){       #check to make sure all gene names are the same
-        if(all(sample_matrices[[x]]@Dimnames[[1]]!=sample_matrices[[x]]@Dimnames[[1]])){
-          stop("gene names don't match") 
-        }
+    Ychr.ch <- geneInfo$gene_name[geneInfo$chr == "Y"]
+    for(x in 2:length(sample_matrices)){       #check to make sure all gene names are the same
+      if(all(sample_matrices[[x]]@Dimnames[[1]]!=sample_matrices[[x]]@Dimnames[[1]])){
+        stop("gene names don't match") 
       }
-      Ychr.ch <- intersect(Ychr.ch, rownames(sample_matrices[[x]]))
-      chrMgenes.ch <- geneInfoH$gene_name[geneInfoH$chr == "MT"]
-    } else if (genome == "GRCm38") {
-      Ychr.ch <- geneInfoM$gene_name[geneInfoM$chr == "chrY"]
-      for(x in 2:length(sample_matrices)){      #check to make sure all gene names are the same
-        if(all(sample_matrices[[x]]@Dimnames[[1]]!=sample_matrices[[x]]@Dimnames[[1]])){
-          stop("gene names don't match") 
-        }
-      }
-      Ychr.ch <- intersect(Ychr.ch, rownames(sample_matrices[[x]]))
-      chrMgenes.ch <- geneInfoM$gene_name[geneInfoM$chr == "chrM"]
     }
+    Ychr.ch <- intersect(Ychr.ch, rownames(sample_matrices[[x]]))
+    chrMgenes.ch <- geneInfo$gene_name[geneInfo$chr == "MT"]
     
     # Make file for plotting
     stats.dt=list(rep(NA, nrow(sampleSheet)))
@@ -214,9 +203,9 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       
       # Filter genes that map to X or Y
       if (genome == "GRCh38") {
-        XYchr.ch <- geneInfoH$gene_name[geneInfoH$chr == "Y" | geneInfoH$chr == "X"]
+        XYchr.ch <- geneInfo$gene_name[geneInfo$chr == "Y" | geneInfo$chr == "X"]
       } else if (genome == "GRCm38") {
-        XYchr.ch <- geneInfoM$gene_name[geneInfoM$chr == "chrY" | geneInfoM$chr == "chrX"]
+        XYchr.ch <- geneInfo$gene_name[geneInfo$chr == "chrY" | geneInfo$chr == "chrX"]
       }
       CM.dgm <- CM.dgm[! rownames(CM.dgm) %in% XYchr.ch,]
       message(paste0(ncol(CM.dgm), " cells and ", nrow(CM.dgm), " genes remaining after chrXY removal."))
