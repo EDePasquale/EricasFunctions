@@ -97,14 +97,25 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
     print(paste0("...QC plots ", name))
     
     # Make vectors with genes of interest
-    Ychr.ch <- geneInfo$gene_name[geneInfo$chr == "Y"]
-    for(x in 2:length(sample_matrices)){       #check to make sure all gene names are the same
-      if(all(sample_matrices[[x]]@Dimnames[[1]]!=sample_matrices[[x]]@Dimnames[[1]])){
-        stop("gene names don't match") 
+    if (genome == "GRCh38") {
+      Ychr.ch <- geneInfo$gene_name[geneInfo$chr == "Y"]
+      for(x in 2:length(sample_matrices)){       #check to make sure all gene names are the same
+        if(all(sample_matrices[[x]]@Dimnames[[1]]!=sample_matrices[[x]]@Dimnames[[1]])){
+          stop("gene names don't match") 
+        }
       }
+      Ychr.ch <- intersect(Ychr.ch, rownames(sample_matrices[[x]]))
+      chrMgenes.ch <- geneInfo$gene_name[geneInfo$chr == "MT"]
+    } else if (genome == "GRCm38") {
+      Ychr.ch <- geneInfo$gene_name[geneInfo$chr == "chrY"]
+      for(x in 2:length(sample_matrices)){       #check to make sure all gene names are the same
+        if(all(sample_matrices[[x]]@Dimnames[[1]]!=sample_matrices[[x]]@Dimnames[[1]])){
+          stop("gene names don't match") 
+        }
+      }
+      Ychr.ch <- intersect(Ychr.ch, rownames(sample_matrices[[x]]))
+      chrMgenes.ch <- geneInfo$gene_name[geneInfo$chr == "chrM"]
     }
-    Ychr.ch <- intersect(Ychr.ch, rownames(sample_matrices[[x]]))
-    chrMgenes.ch <- geneInfo$gene_name[geneInfo$chr == "MT"]
     
     # Make file for plotting
     stats.dt=list(rep(NA, nrow(sampleSheet)))
