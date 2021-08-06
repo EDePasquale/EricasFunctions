@@ -119,7 +119,6 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
     stats.dt=list(rep(NA, nrow(sampleSheet)))
     for(x in 1:length(sample_matrices)){
       print(dim(sample_matrices[[x]]))
-      messsge(dim(sample_matrices[[x]]))
       stats1.dt <- data.table(cell = colnames(sample_matrices[[x]]),
                               umis = colSums(sample_matrices[[x]]),
                               genes = colSums(sample_matrices[[x]] != 0),
