@@ -121,6 +121,17 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       print(dim(sample_matrices[[x]]))
       print(class(sample_matrices[[x]]))
       test<<-sample_matrices[[x]]
+      print("umis")
+      a<<-colSums(sample_matrices[[x]])
+      print("genes")
+      b<<-colSums(sample_matrices[[x]] != 0)
+      print("chrYfraction")
+      c<<-colSums(sample_matrices[[x]][Ychr.ch,]) / colSums(sample_matrices[[x]])
+      print("chrMfraction")
+      d<<-colSums(sample_matrices[[x]][chrMgenes.ch,]) / colSums(sample_matrices[[x]])
+      print("chrMcount")
+      e<<-colSums(sample_matrices[[x]][chrMgenes.ch,])
+      
       stats1.dt <- data.table(cell = colnames(sample_matrices[[x]]),
                               umis = colSums(sample_matrices[[x]]),
                               genes = colSums(sample_matrices[[x]] != 0),
