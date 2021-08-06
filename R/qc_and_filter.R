@@ -36,8 +36,10 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
   if (sig == T) {data(signatures)}
   if (genome == "GRCh38") {
     data(geneInfoH)
+    geneInfo=geneInfoH
   } else {
     data(geneInfoM)
+    geneInfo=geneInfoM
   }
   
   for(i in 1:length(directories)){
