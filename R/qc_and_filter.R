@@ -22,14 +22,14 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
   options(scipen = 999)
   
   # Load libraries
-  # library(Matrix)
-  # library(Matrix.utils)
-  # library(data.table)
-  # library(gdata)
-  # library(Rtsne)
-  # library(umap)
-  # library(dplyr)
-  # library(DropletUtils)
+  library(Matrix)
+  library(Matrix.utils)
+  library(data.table)
+  library(gdata)
+  library(Rtsne)
+  library(umap)
+  library(dplyr)
+  library(DropletUtils)
   
   # Source files 
   data(popcol)
@@ -250,7 +250,7 @@ qc_and_filter <- function(directories, genome = "GRCh38", suffix = "default", mi
       }
       
       # Write out expression matrix (10x format)
-      DropletUtils:::write10xCounts(paste0("./", unique(sampleSheet$Donor)[x], "_FLT3"), temp_m, version="3")
+      DropletUtils:::write10xCounts(paste0("./", unique(sampleSheet$Donor)[x]), temp_m, version="3")
     }
     
     #=================================================

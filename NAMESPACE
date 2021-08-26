@@ -2,3 +2,6 @@
 
 export(cell_signatures)
 export(qc_and_filter)
+export(random_forest)
+export(scpred)
+export(seurat_transfer_data)

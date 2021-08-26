@@ -69,3 +69,51 @@ cell_signatures(coords, expression, signatures, file.path.prefix, cexsize = 1, t
 #### Value ####
 
 No return value
+
+
+## random_forest() ##
+
+```javascript
+random_forest <- function(reference, datasets, results_name="results", ordering_vector="none", cluster_names="none", cluster_colors="none")
+```
+
+#### Arguments ####
+
+* reference - Path to a Seurat object that is an integrated reference
+* datasets - List of directories containing a Seurat object Example single directory path is "~/Documents/Projects/Data_files_temp/Donor/SBM1014/Seurat.rds"
+* results_name - The name you would prefer to call the output directory. Default is "results"
+* ordering_vector - A numeric vector containing the order you would like your clusters to appear in the plot, starting with 1. Default is "none", which retains the original order.
+* cluster_names - A character vector containing the names of the clusters, in the original order. Default is "none" or cluster numbers to be used.
+* cluster_colors - A character vector containing hex codes for the colors of cluster, in the original order. Default is "none" for random colors.
+
+
+## seurat_transfer_data() ##
+
+```javascript
+seurat_transfer_data <- function(reference, datasets, results_name="results", ordering_vector="none", cluster_names="none", cluster_colors="none")
+```
+
+#### Arguments ####
+
+* reference - Path to a Seurat object that is an integrated reference
+* datasets - List of directories containing a Seurat object Example single directory path is "~/Documents/Projects/Data_files_temp/Donor/SBM1014/Seurat.rds"
+* results_name - The name you would prefer to call the output directory. Default is "results"
+* ordering_vector - A numeric vector containing the order you would like your clusters to appear in the plot, starting with 1. Default is "none", which retains the original order.
+* cluster_names - A character vector containing the names of the clusters, in the original order. Default is "none" or cluster numbers to be used.
+* cluster_colors - A character vector containing hex codes for the colors of cluster, in the original order. Default is "none" for random colors.
+
+
+## scpred() ##
+
+```javascript
+scpred <- function(reference, datasets, results_name="results", ordering_vector="none", cluster_names="none", cluster_colors="none")
+```
+
+#### Arguments ####
+
+* reference - Path to a Seurat object that is an integrated reference
+* datasets - List of directories containing a Seurat object Example single directory path is "~/Documents/Projects/Data_files_temp/Donor/SBM1014/Seurat.rds"
+* results_name - The name you would prefer to call the output directory. Default is "results"
+* ordering_vector - A numeric vector containing the order you would like your clusters to appear in the plot, starting with 1. Default is "none", which retains the original order.
+* cluster_names - A character vector containing the names of the clusters, in the original order. Default is "none" or cluster numbers to be used.
+* cluster_colors - A character vector containing hex codes for the colors of cluster, in the original order. Default is "none" for random colors.
